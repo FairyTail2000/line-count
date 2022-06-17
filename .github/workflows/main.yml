@@ -36,7 +36,7 @@ jobs:
           mv target/armv7-unknown-linux-gnueabihf/debug/line_count ./line_count-debug
       - uses: actions/upload-artifact@v2
         with:
-          name: wuerfeln-armv7-unknown-linux-gnueabihf
+          name: line_count-armv7-unknown-linux-gnueabihf
           path: |
             line_count
             line_count-debug
@@ -68,7 +68,39 @@ jobs:
           mv target/aarch64-linux-android/debug/line_count ./line_count-debug
       - uses: actions/upload-artifact@v2
         with:
-          name: wuerfeln-aarch64-linux-android
+          name: line_count-aarch64-linux-android
+          path: |
+            line_count
+            line_count-debug
+  build_linux_x86:
+    name: Linux x86_64
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: x86_64-unknown-linux-gnu
+          override: true
+      - uses: actions-rs/cargo@v1
+        name: Build Release
+        with:
+          use-cross: true
+          command: build
+          args: --target x86_64-unknown-linux-gnu --release --all-features
+      - uses: actions-rs/cargo@v1
+        name: Build Debug
+        with:
+          use-cross: true
+          command: build
+          args: --target x86_64-unknown-linux-gnu --all-features
+      - name: Copy binaries
+        run: |
+          mv target/x86_64-unknown-linux-gnu/release/line_count ./line_count
+          mv target/x86_64-unknown-linux-gnu/debug/line_count ./line_count-debug
+      - uses: actions/upload-artifact@v2
+        with:
+          name: line_count-x86_64-unknown-linux-gnu
           path: |
             line_count
             line_count-debug
