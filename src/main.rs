@@ -15,6 +15,9 @@ fn read_dir(path: &str, include_hidden: bool) -> u128 {
                                         0 as u128
                                     }
                                 } else if typ.is_file() {
+                                    if ent.file_name().to_str().unwrap().starts_with(".") && !include_hidden {
+                                        return 0 as u128
+                                    }
                                     match std::fs::File::open(ent.path().to_str().unwrap()) {
                                         Ok(file) => {
                                             let reader = std::io::BufReader::new(file);
