@@ -63,14 +63,14 @@ fn read_dir(path: &str, include_hidden: bool) -> u128 {
 }
 
 fn main() {
-    let args = clap::App::new("line_count")
+    let args = clap::Command::new("line_count")
         .author("Rafael Sundorf <rafael.sundorf@gmail.com>")
-        .arg(clap::Arg::new("location").short('l').long("location").help("The directory path to loop through or file").default_value(".").forbid_empty_values(true))
-        .arg(clap::Arg::new("include-hidden").short('i').long("include-hidden").help("Includes hidden directories").takes_value(false))
+        .arg(clap::Arg::new("location").short('l').long("location").help("The directory path to loop through or file").default_value("."))
+        .arg(clap::Arg::new("include-hidden").short('i').long("include-hidden").help("Includes hidden directories").num_args(0..1))
         .get_matches();
 
-    let path = args.value_of("location").unwrap();
-    let include = args.is_present("include-hidden");
+    let path: &String = args.get_one("location").unwrap();
+    let include = args.get_flag("include-hidden");
     let folder = match std::fs::File::open(path) {
         Ok(file) => file,
         Err(e) => {
