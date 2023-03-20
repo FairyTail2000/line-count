@@ -40,38 +40,6 @@ jobs:
           path: |
             line_count
             line_count-debug
-  build_android_aarch64:
-    name: Android
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          target: aarch64-linux-android
-          override: true
-      - uses: actions-rs/cargo@v1
-        name: Build Release
-        with:
-          use-cross: true
-          command: build
-          args: --target aarch64-linux-android --release --all-features
-      - uses: actions-rs/cargo@v1
-        name: Build Debug
-        with:
-          use-cross: true
-          command: build
-          args: --target aarch64-linux-android --all-features
-      - name: Copy binaries
-        run: |
-          mv target/aarch64-linux-android/release/line_count ./line_count
-          mv target/aarch64-linux-android/debug/line_count ./line_count-debug
-      - uses: actions/upload-artifact@v2
-        with:
-          name: line_count-aarch64-linux-android
-          path: |
-            line_count
-            line_count-debug
   build_linux_x86:
     name: Linux x86_64
     runs-on: ubuntu-latest
